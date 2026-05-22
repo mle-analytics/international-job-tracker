@@ -1,0 +1,32 @@
+name: Global Job Pipeline Tracker
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Automatically runs every single day at 2:00 AM UTC
+  workflow_dispatch: # Gives you a manual button to run it instantly whenever you want
+
+jobs:
+  execute-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Initialize Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Scraper Dependencies
+        run: pip install python-jobspy pandas
+
+      - name: Run Tracker Script
+        run: python job_tracker.py
+
+      - name: Commit Updated CSV Results to Repository
+        run: |
+          git config --global user.name "GitHub Automation Bot"
+          git config --global user.email "actions@github.com"
+          git add realtime_job_pipeline.csv
+          git commit -m "Automated Sync: Appended latest international data jobs" || exit 0
+          git push
