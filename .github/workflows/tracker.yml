@@ -8,6 +8,11 @@ on:
 jobs:
   execute-pipeline:
     runs-on: ubuntu-latest
+    
+    # This line tells GitHub to use Node.js 24 immediately and clears the warning
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
