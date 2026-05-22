@@ -9,7 +9,6 @@ jobs:
   execute-pipeline:
     runs-on: ubuntu-latest
     
-    # This line tells GitHub to use Node.js 24 immediately and clears the warning
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -23,7 +22,12 @@ jobs:
           python-version: '3.11'
 
       - name: Install Scraper Dependencies
-        run: pip install python-jobspy pandas
+        run: |
+          pip install python-jobspy pandas
+          pip install playwright
+
+      - name: Install Headless Playwright Browsers
+        run: playwright install chromium
 
       - name: Run Tracker Script
         run: python job_tracker.py
